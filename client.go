@@ -115,13 +115,17 @@ func NewClient(config *Config) (client *Client, err error) {
 		},
 	}
 
-	token := config.Token
+	var token *oauth2.Token
 
-	if token == "" {
-		token, err := authConfig.PasswordCredentialsToken(ctx, config.Username, config.Password)
+	if config.Token == "" {
+		token, err = authConfig.PasswordCredentialsToken(ctx, config.Username, config.Password)
 
 		if err != nil {
 			return nil, fmt.Errorf("Error getting token: %v", err)
+		}
+	} else {
+		token = &oauth2.Token{
+			AccessToken: config.Token,
 		}
 	}
 
