@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
@@ -124,8 +125,10 @@ func NewClient(config *Config) (client *Client, err error) {
 			return nil, fmt.Errorf("Error getting token: %v", err)
 		}
 	} else {
+		values := strings.Split(config.Token, " ")
 		token = &oauth2.Token{
-			AccessToken: config.Token,
+			TokenType:   values[0],
+			AccessToken: values[1],
 		}
 	}
 
